@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geofence_app/Services/geofence_service.dart';
 import 'package:provider/provider.dart';
 import 'package:geofence_app/Providers/geofence_provider.dart';
 import 'package:geofence_app/Services/location_service.dart';
@@ -33,6 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     await NotificationService.init();
 
+    final geofenceService = GeofenceService();
+    for (var gf in provider.geofences) {
+      geofenceService.registerGeofence(gf);
+    }
+    geofenceService.startMonitoring();
+
     if (!mounted) return;
     final position = await LocationService.getCurrentLocation(context);
 
@@ -44,9 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       _checkGeofence(provider);
     } else {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() => _isLoading = false);
     }
   }
 
