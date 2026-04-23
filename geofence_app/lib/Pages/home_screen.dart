@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:geofence_app/Providers/geofence_provider.dart';
 import 'package:geofence_app/Services/location_service.dart';
 import 'package:geofence_app/Services/notification_service.dart';
+import 'package:geofence_app/Pages/history_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:math';
 
@@ -84,7 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
     const earthRadius = 6371000.0; // meters
     final dLat = _toRadians(lat2 - lat1);
     final dLon = _toRadians(lon2 - lon1);
-    final a = sin(dLat / 2) * sin(dLat / 2) +
+    final a =
+        sin(dLat / 2) * sin(dLat / 2) +
         cos(_toRadians(lat1)) *
             cos(_toRadians(lat2)) *
             sin(dLon / 2) *
@@ -101,6 +103,18 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Geofence App'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: 'View History',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const HistoryScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -157,9 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           'Center: (${provider.geofences.first.latitude}, ${provider.geofences.first.longitude})',
                         ),
-                        Text(
-                          'Radius: ${provider.geofences.first.radius}m',
-                        ),
+                        Text('Radius: ${provider.geofences.first.radius}m'),
                       ],
                     ],
                   ),
