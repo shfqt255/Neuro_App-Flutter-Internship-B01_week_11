@@ -29,4 +29,9 @@ class DatabaseService {
       'time': DateTime.now().toString(),
     });
   }
+
+  static Future<List<Map<String, dynamic>>> getAll() async {
+    final db = await init();
+    return db.query('locations', orderBy: 'id DESC');
+  }
 }
